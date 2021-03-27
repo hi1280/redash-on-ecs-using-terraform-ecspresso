@@ -1,0 +1,39 @@
+{
+  "deploymentConfiguration": {
+    "deploymentCircuitBreaker": {
+      "enable": false,
+      "rollback": false
+    },
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100
+  },
+  "desiredCount": 1,
+  "enableECSManagedTags": true,
+  "healthCheckGracePeriodSeconds": 0,
+  "launchType": "FARGATE",
+  "loadBalancers": [
+    {
+      "containerName": "server",
+      "containerPort": 5000,
+      "targetGroupArn": "{{ tfstate `aws_lb_target_group.redash.arn` }}"
+    }
+  ],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "assignPublicIp": "ENABLED",
+      "securityGroups": [
+        "{{ tfstate `aws_security_group.redash.id` }}"
+      ],
+      "subnets": [
+        "{{ tfstate `module.vpc.aws_subnet.public[0].id` }}",
+        "{{ tfstate `module.vpc.aws_subnet.public[1].id` }}",
+        "{{ tfstate `module.vpc.aws_subnet.public[2].id` }}"
+      ]
+    }
+  },
+  "placementConstraints": [],
+  "placementStrategy": [],
+  "platformVersion": "LATEST",
+  "schedulingStrategy": "REPLICA",
+  "serviceRegistries": []
+}

@@ -1,0 +1,89 @@
+{
+  "containerDefinitions": [
+    {
+      "command": [
+        "server"
+      ],
+      "cpu": 0,
+      "dnsSearchDomains": [],
+      "dnsServers": [],
+      "dockerSecurityOptions": [],
+      "entryPoint": [],
+      "environment": [
+        {
+          "name": "REDASH_RATELIMIT_ENABLED",
+          "value": "false"
+        },
+        {
+          "name": "REDASH_WEB_WORKERS",
+          "value": "2"
+        },
+        {
+          "name": "PYTHONUNBUFFERED",
+          "value": "0"
+        },
+        {
+          "name": "REDASH_LOG_LEVEL",
+          "value": "INFO"
+        }
+      ],
+      "essential": true,
+      "extraHosts": [],
+      "image": "redash/redash:9.0.0-beta.b42121",
+      "links": [],
+      "linuxParameters": {
+        "capabilities": {},
+        "devices": []
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/redash",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "mountPoints": [],
+      "name": "server",
+      "portMappings": [
+        {
+          "containerPort": 5000,
+          "hostPort": 5000,
+          "protocol": "tcp"
+        }
+      ],
+      "privileged": false,
+      "pseudoTerminal": false,
+      "readonlyRootFilesystem": false,
+      "secrets": [
+        {
+          "name": "REDASH_DATABASE_URL",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.redash_db_url.arn` }}"
+        },
+        {
+          "name": "REDASH_REDIS_URL",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.redash_redis_url.arn` }}"
+        },
+        {
+          "name": "REDASH_COOKIE_SECRET",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.cookie_secret.arn` }}"
+        },
+        {
+          "name": "REDASH_SECRET_KEY",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.secret.arn` }}"
+        }
+      ],
+      "volumesFrom": []
+    }
+  ],
+  "cpu": "256",
+  "executionRoleArn": "{{ tfstate `aws_iam_role.redash.arn` }}",
+  "family": "redash_server",
+  "memory": "512",
+  "networkMode": "awsvpc",
+  "placementConstraints": [],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "volumes": []
+}

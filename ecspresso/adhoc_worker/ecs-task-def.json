@@ -1,0 +1,83 @@
+{
+  "containerDefinitions": [
+    {
+      "command": [
+        "worker"
+      ],
+      "cpu": 0,
+      "dnsSearchDomains": [],
+      "dnsServers": [],
+      "dockerSecurityOptions": [],
+      "entryPoint": [],
+      "environment": [
+        {
+          "name": "WORKERS_COUNT",
+          "value": "2"
+        },
+        {
+          "name": "PYTHONUNBUFFERED",
+          "value": "0"
+        },
+        {
+          "name": "QUEUES",
+          "value": "queries"
+        },
+        {
+          "name": "REDASH_LOG_LEVEL",
+          "value": "INFO"
+        }
+      ],
+      "essential": true,
+      "extraHosts": [],
+      "image": "redash/redash:9.0.0-beta.b42121",
+      "links": [],
+      "linuxParameters": {
+        "capabilities": {},
+        "devices": []
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/redash",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "mountPoints": [],
+      "name": "adhoc_worker",
+      "portMappings": [],
+      "privileged": false,
+      "pseudoTerminal": false,
+      "readonlyRootFilesystem": false,
+      "secrets": [
+        {
+          "name": "REDASH_DATABASE_URL",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.redash_db_url.arn` }}"
+        },
+        {
+          "name": "REDASH_REDIS_URL",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.redash_redis_url.arn` }}"
+        },
+        {
+          "name": "REDASH_COOKIE_SECRET",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.cookie_secret.arn` }}"
+        },
+        {
+          "name": "REDASH_SECRET_KEY",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.secret.arn` }}"
+        }
+      ],
+      "volumesFrom": []
+    }
+  ],
+  "cpu": "512",
+  "executionRoleArn": "{{ tfstate `aws_iam_role.redash.arn` }}",
+  "family": "redash_adhoc_worker",
+  "memory": "1024",
+  "networkMode": "awsvpc",
+  "placementConstraints": [],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "volumes": []
+}

@@ -1,0 +1,10 @@
+region: ap-northeast-1
+cluster: redash
+service: redash_adhoc_worker
+service_definition: ecs-service-def.json
+task_definition: ecs-task-def.json
+timeout: 10m0s
+plugins:
+  - name: tfstate
+    config:
+      url: s3://hi1280-tfstate-main/redash.tfstate
