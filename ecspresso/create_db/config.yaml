@@ -1,6 +1,7 @@
 region: ap-northeast-1
 cluster: redash
-service: ecscompose-service-redash_create_db
+service: redash_create_db
+service_definition: ecs-service-def.json
 task_definition: ecs-task-def.json
 timeout: 10m0s
 plugins:

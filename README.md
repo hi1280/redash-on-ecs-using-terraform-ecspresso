@@ -18,6 +18,7 @@ $ cd terraform
 $ terraform init
 $ terraform apply
 $ cd ecspresso
+$ ecspresso create --config create_db/config.yaml
 $ ecspresso run --config create_db/config.yaml --task-def create_db/ecs-task-def.json
 $ ecspresso create --config worker/config.yaml
 $ ecspresso create --config adhoc_worker/config.yaml

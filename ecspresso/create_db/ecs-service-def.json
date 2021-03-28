@@ -1,0 +1,32 @@
+{
+  "deploymentConfiguration": {
+    "deploymentCircuitBreaker": {
+      "enable": false,
+      "rollback": false
+    },
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100
+  },
+  "desiredCount": 0,
+  "enableECSManagedTags": true,
+  "launchType": "FARGATE",
+  "loadBalancers": [],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "assignPublicIp": "ENABLED",
+      "securityGroups": [
+        "{{ tfstate `aws_security_group.redash.id` }}"
+      ],
+      "subnets": [
+        "{{ tfstate `module.vpc.aws_subnet.public[0].id` }}",
+        "{{ tfstate `module.vpc.aws_subnet.public[1].id` }}",
+        "{{ tfstate `module.vpc.aws_subnet.public[2].id` }}"
+      ]
+    }
+  },
+  "placementConstraints": [],
+  "placementStrategy": [],
+  "platformVersion": "LATEST",
+  "schedulingStrategy": "REPLICA",
+  "serviceRegistries": []
+}
